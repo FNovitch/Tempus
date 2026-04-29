@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,39 +9,81 @@
     <link rel="icon" type="image/x-icon" href="./src/images/weather.png" />
   </head>
   <body>
-    <div class="logoContainer">
-      <img src="/src/images/logo.png" alt="Logo Tempus" class="logo" />
-    </div>
-
-    <h4 class="typewriter">
-      Vamos olhar como está o clima na sua cidade neste momento?
-    </h4>
-
-    <form class="busca">
-      <input type="search" id="searchInput" />
-      <button>Buscar</button>
-    </form>
-
-    <div class="resultado">
-      <div class="titulo">--</div>
-
-      <div class="info">
-        <div class="temp">
-          <div class="tempTitulo">Temperatura</div>
-          <div class="tempInfo">-- <sup>ºC</sup></div>
-          <img src="http://openweathermap.org/img/wn/10d@2x.png" />
-        </div>
-        <div class="vento">
-          <div class="ventoTitulo">Vento</div>
-          <div class="ventoInfo">-- <span>km/h</span></div>
-          <div class="ventoArea">
-            <div class="ventoPonto" style="transform: rotate(0deg)"></div>
+    <main class="page">
+      <section class="app-shell" aria-labelledby="app-title">
+        <header class="hero">
+          <div class="brand">
+            <div class="logo-badge">
+              <img
+                src="/src/images/logo-refined.png"
+                alt="Logo Tempus"
+                class="logo"
+              />
+            </div>
+            <span class="brand-name">Tempus</span>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="aviso"></div>
+          <p class="eyebrow">Clima em tempo real</p>
+          <h1 id="app-title" class="hero-title">
+            Uma consulta de clima simples, rapida e elegante.
+          </h1>
+          <p class="hero-copy">
+            Pesquise qualquer cidade e veja a temperatura e a direcao do vento
+            em uma interface limpa, objetiva e facil de usar.
+          </p>
+        </header>
+
+        <section class="search-panel" aria-label="Busca de clima">
+          <form class="busca">
+            <label class="sr-only" for="searchInput">Digite o nome da cidade</label>
+            <input
+              type="search"
+              id="searchInput"
+              name="city"
+              placeholder="Ex.: Sao Paulo, Recife ou Lisboa"
+              autocomplete="off"
+            />
+            <button type="submit">Buscar</button>
+          </form>
+          <p class="search-helper">Use o nome da cidade para iniciar a consulta.</p>
+        </section>
+
+        <p class="aviso" role="status" aria-live="polite"></p>
+
+        <section class="resultado" hidden aria-label="Resultado da consulta">
+          <div class="resultado-header">
+            <div>
+              <p class="resultado-label">Condicoes atuais</p>
+              <h2 class="titulo">--</h2>
+            </div>
+          </div>
+
+          <div class="info">
+            <article class="metric-card temp">
+              <div class="metric-header">
+                <p class="tempTitulo">Temperatura</p>
+                <img
+                  src="https://openweathermap.org/img/wn/10d@2x.png"
+                  alt="Icone do clima"
+                />
+              </div>
+              <div class="tempInfo">-- <sup>&deg;C</sup></div>
+            </article>
+
+            <article class="metric-card vento">
+              <div class="metric-header">
+                <p class="ventoTitulo">Vento</p>
+              </div>
+              <div class="ventoInfo">-- <span>km/h</span></div>
+              <div class="ventoArea" aria-hidden="true">
+                <div class="ventoPonto" style="transform: rotate(0deg)"></div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
     <script src="./dist/script.js"></script>
   </body>
 </html>

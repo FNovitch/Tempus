@@ -27,38 +27,44 @@ formElement.addEventListener("submit", (event) => __awaiter(void 0, void 0, void
     limparInfo();
     mostrarAviso("Carregando...");
     try {
-        const apiKey = "ff2f2a7b72520b525b30b9827ca17ce6";
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(input)}&appid=${apiKey}&units=metric&lang=pt_br`;
-        const response = yield fetch(url);
-        if (!response.ok)
-            throw new Error("Localização não encontrada, tente novamente!");
-        const data = yield response.json();
-        mostrarInfo({
-            name: data.name,
-            country: data.sys.country,
-            temp: Math.round(data.main.temp),
-            tempIcon: data.weather[0].icon,
-            windSpeed: data.wind.speed,
-            windAngle: data.wind.deg,
-        });
+        const response = yield fetch(`/api/weather?city=${encodeURIComponent(input)}`);
+        const payload = yield lerPayloadDaResposta(response);
+        if (!response.ok || !payload.data) {
+            throw new Error(payload.message || "Nao foi possivel buscar o clima.");
+        }
+        mostrarInfo(payload.data);
     }
     catch (error) {
         mostrarAviso(error.message);
     }
 }));
-function mostrarInfo(json) {
+function lerPayloadDaResposta(response) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+            return (yield response.json());
+        }
+        const responseText = yield response.text();
+        if (responseText.trim().startsWith("<!DOCTYPE") || responseText.trim().startsWith("<html")) {
+            throw new Error("A requisicao nao chegou na API de clima. Inicie o servidor Node.js local ou verifique a configuracao do deploy.");
+        }
+        throw new Error("A resposta da API veio em um formato invalido.");
+    });
+}
+function mostrarInfo(data) {
     mostrarAviso("");
-    resultadoElement.style.display = "block";
-    tituloElement.innerHTML = `${json.name}, ${json.country}`;
-    tempInfoElement.innerHTML = `${json.temp} <sup>°C</sup>`;
-    ventoInfoElement.innerHTML = `${json.windSpeed} <span>Km/h</span>`;
-    tempImageElement.src = `http://openweathermap.org/img/wn/${json.tempIcon}@2x.png`;
-    ventoPontoElement.style.transform = `rotate(${json.windAngle - 90}deg)`;
+    resultadoElement.hidden = false;
+    tituloElement.textContent = `${data.city}, ${data.country}`;
+    tempInfoElement.innerHTML = `${data.temperature} <sup>&deg;C</sup>`;
+    ventoInfoElement.innerHTML = `${data.windSpeed} <span>Km/h</span>`;
+    tempImageElement.src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
+    tempImageElement.alt = `Clima em ${data.city}`;
+    ventoPontoElement.style.transform = `rotate(${data.windAngle - 90}deg)`;
 }
 function mostrarAviso(mensagem) {
     avisoElement.textContent = mensagem;
 }
 function limparInfo() {
     mostrarAviso("");
-    resultadoElement.style.display = "none";
+    resultadoElement.hidden = true;
 }
