@@ -127,8 +127,8 @@ npm run dev
 - Melhor responsividade para telas menores
 - Melhor tratamento de erro quando a API nao responde em JSON
 
-## 🚀 Acesse o projeto
+## Deploy
 
 Deploy atual do projeto:
 
-👉 [(https://tempus-fnovitchs-projects.vercel.app)]
+[Acessar Tempus](https://tempus-fnovitchs-projects.vercel.app)
